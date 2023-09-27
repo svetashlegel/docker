@@ -9,5 +9,11 @@ Create a `.env` configuration file with your personal settings in the root of th
 
 Create a database in postgresql. The name of the database must match the name specified in the file.
 
+## Fill DB
+You can fill the database with initial data using the commands:
+- `python manage.py fill_courses`
+- `python manage.py fill_lessons`
+- `python manage.py fill_payments`
+
 ## Running
 To run the project, enter the `python manage.py runserver` command in the terminal.
