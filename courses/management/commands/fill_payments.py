@@ -13,5 +13,10 @@ class Command(BaseCommand):
 
         lessons = Lesson.objects.all()
         summ = 15
+        method = 'cash'
         for lesson in lessons:
-            Payment.objects.create(summ=summ, lesson=lesson)
+            Payment.objects.create(summ=summ, lesson=lesson, payment_method=method, date='2023-09-20')
+            if method == 'cash':
+                method = 'non-cash'
+            else:
+                method = 'cash'
