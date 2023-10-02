@@ -16,6 +16,8 @@ Now you can fill the database with initial data using the commands:
 - `python manage.py fill_lessons`
 - `python manage.py fill_payments`
 
+Or you can create it by yourself!
+
 ## Create users
 To create users use the following commands:
 - `python manage.py create_user`
