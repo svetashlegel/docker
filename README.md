@@ -16,5 +16,12 @@ Now you can fill the database with initial data using the commands:
 - `python manage.py fill_lessons`
 - `python manage.py fill_payments`
 
+## Create users
+To create users use the following commands:
+- `python manage.py create_user`
+- `python manage.py create_moderator`
+
+User can create, edit, delete and view only his own lessons and courses. The moderator has the rights to view and edit any courses, but cannot delete or create them.
+
 ## Running
 To run the project, enter the `python manage.py runserver` command in the terminal.
