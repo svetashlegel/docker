@@ -3,8 +3,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 
-from courses.models import Cours, Lesson, Payment
-from courses.serializers import CoursSerializer, LessonSerializer, PaymentSerializer
+from courses.models import Cours, Lesson, Payment, Subscription
+from courses.serializers import CoursSerializer, LessonSerializer, PaymentSerializer, SubscriptionSerializer
 from courses.permissions import IsOwnerOrModerator
 from courses.paginators import CoursesPaginator
 
@@ -74,3 +74,17 @@ class PaymentListAPIView(generics.ListAPIView):
     ordering_fields = ('date',)
     permission_classes = [IsAuthenticated]
 
+
+class SubscriptionCreateAPIView(generics.CreateAPIView):
+    serializer_class = SubscriptionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        new_sub = serializer.save()
+        new_sub.owner = self.request.user
+        new_sub.save()
+
+
+class SubscriptionDestroyAPIView(generics.DestroyAPIView):
+    queryset = Subscription.objects.all()
+    permission_classes = [IsAuthenticated, IsOwnerOrModerator]

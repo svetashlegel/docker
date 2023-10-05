@@ -44,3 +44,10 @@ class Payment(models.Model):
 
     cours = models.ForeignKey(Cours, on_delete=models.CASCADE, **NULLABLE, verbose_name='курс')
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, **NULLABLE, verbose_name='урок')
+
+
+class Subscription(models.Model):
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE, verbose_name='пользователь')
+    cours = models.ForeignKey(Cours, on_delete=models.CASCADE, verbose_name='курс')
+    is_active = models.BooleanField(verbose_name='активирована', default=True)

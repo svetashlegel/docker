@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from users.models import User
-from courses.models import Lesson
+from courses.models import Lesson, Subscription, Cours
 
 
 class LessonTestCase(APITestCase):
@@ -62,7 +62,7 @@ class LessonTestCase(APITestCase):
                 "previous": None,
                 "results": [
                     {
-                        "id": 1,
+                        "id": self.lesson.id,
                         "title": "Test",
                         "preview": None,
                         "description": "Test description",
@@ -76,7 +76,7 @@ class LessonTestCase(APITestCase):
         """Тестирование вывода урока"""
 
         response = self.client.get(
-            '/lesson/1/'
+            f'/lesson/{self.lesson.id}/'
         )
 
         self.assertEqual(
@@ -86,7 +86,7 @@ class LessonTestCase(APITestCase):
         self.assertEqual(
             response.json(),
             {
-                "id": 1,
+                "id": self.lesson.id,
                 "title": "Test",
                 "preview": None,
                 "description": "Test description",
@@ -106,7 +106,7 @@ class LessonTestCase(APITestCase):
         }
 
         response = self.client.put(
-            '/lesson/update/1/',
+            f'/lesson/update/{self.lesson.id}/',
             data=data
         )
 
@@ -118,7 +118,7 @@ class LessonTestCase(APITestCase):
         self.assertEqual(
             response.json(),
             {
-                "id": 1,
+                "id": self.lesson.id,
                 "title": "Test update",
                 "preview": None,
                 "description": "Test new description",
@@ -132,7 +132,7 @@ class LessonTestCase(APITestCase):
         """Тестирование удаления урока"""
 
         response = self.client.delete(
-            '/lesson/delete/1/'
+            f'/lesson/delete/{self.lesson.id}/'
         )
 
         self.assertEqual(
@@ -145,3 +145,64 @@ class LessonTestCase(APITestCase):
             0
         )
 
+
+class SubscriptionTestCase(APITestCase):
+
+    def setUp(self) -> None:
+        self.user = User.objects.create(
+            email='user@test.ru',
+            role='user',
+            password='1234',
+            is_staff=False,
+            is_active=True
+        )
+        self.client.force_authenticate(user=self.user)
+
+        self.cours = Cours.objects.create(
+            title='Test',
+            description='Test description',
+            owner=self.user
+        )
+        self.subscription = Subscription.objects.create(
+            cours=self.cours,
+            owner=self.user
+        )
+
+    def test_create_subscription(self):
+        """Тестирование создания подписки"""
+
+        data = {
+            'cours': 1
+        }
+
+        response = self.client.post(
+            reverse('courses:subscription-create'),
+            data=data
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_201_CREATED
+        )
+
+        self.assertEqual(
+            Subscription.objects.count(),
+            2
+        )
+
+    def test_delete_subscription(self):
+        """Тестирование удаления подписки"""
+
+        response = self.client.delete(
+            f'/subscription/delete/{self.subscription.id}/'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_204_NO_CONTENT
+        )
+
+        self.assertEqual(
+            Subscription.objects.count(),
+            0
+        )
