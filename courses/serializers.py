@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from courses.models import Cours, Lesson, Payment, Subscription
+from courses.services import get_url, create_product
 from courses.validators import LinkValidator
 
 
@@ -13,10 +14,15 @@ class LessonSerializer(serializers.ModelSerializer):
 
 
 class PaymentSerializer(serializers.ModelSerializer):
+    payment_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Payment
-        fields = '__all__'
+        fields = ['id', 'date', 'summ', 'payment_method', 'cours', 'lesson', 'payment_url']
+
+    def get_payment_url(self, obj):
+        price = create_product(obj)
+        return get_url(price)
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
