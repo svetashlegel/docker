@@ -27,6 +27,3 @@ User can create, edit, delete and view only his own lessons and courses. The mod
 
 ## Running
 To run the project, enter the `python manage.py runserver` command in the terminal.
-
-## Payment
-Go to the Payment section using the URL address `http://localhost:8000/payment/`, and do not forget to indicate your token. You will see a list of courses and lessons. To place an order, follow the attached link.

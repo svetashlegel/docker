@@ -4,7 +4,8 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 
 from courses.models import Cours, Lesson, Payment, Subscription
-from courses.serializers import CoursSerializer, LessonSerializer, PaymentSerializer, SubscriptionSerializer
+from courses.serializers import (CoursSerializer, LessonSerializer, PaymentSerializer, PaymentCreateSerializer,
+                                 SubscriptionSerializer)
 from courses.permissions import IsOwnerOrModerator
 from courses.paginators import CoursesPaginator
 
@@ -64,6 +65,11 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsOwnerOrModerator]
+
+
+class PaymentCreateAPIView(generics.CreateAPIView):
+    serializer_class = PaymentCreateSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class PaymentListAPIView(generics.ListAPIView):

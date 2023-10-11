@@ -14,15 +14,31 @@ class LessonSerializer(serializers.ModelSerializer):
 
 
 class PaymentSerializer(serializers.ModelSerializer):
-    payment_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Payment
-        fields = ['id', 'date', 'summ', 'payment_method', 'cours', 'lesson', 'payment_url']
+        fields = ['id', 'date', 'summ', 'payment_method', 'cours', 'lesson']
+
+
+class PaymentCreateSerializer(serializers.ModelSerializer):
+    payment_url = serializers.SerializerMethodField()
+    summ = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Payment
+        fields = ['id', 'summ', 'payment_method', 'cours', 'lesson', 'payment_url']
+        read_only_fields = ['id', 'summ', 'payment_url']
 
     def get_payment_url(self, obj):
         price = create_product(obj)
         return get_url(price)
+
+    def get_summ(self, payment):
+        if payment.cours:
+            price = payment.cours.price
+        elif payment.lesson:
+            price = payment.lesson.price
+        return price
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):

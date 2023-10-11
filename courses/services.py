@@ -9,11 +9,16 @@ def create_product(payment):
         name='Оплата обучения',
         description=payment.cours,
     )
+    price = 100
+    if payment.cours:
+        price = payment.cours.price
+    elif payment.lesson:
+        price = payment.lesson.price
     print(payment.cours)
     print(payment.summ)
     product.save()
     price = stripe.Price.create(
-        unit_amount=payment.summ * 10,
+        unit_amount=price * 10,
         currency="usd",
         recurring={"interval": "month"},
         product=product['id'],
