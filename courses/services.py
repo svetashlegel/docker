@@ -14,8 +14,6 @@ def create_product(payment):
         price = payment.cours.price
     elif payment.lesson:
         price = payment.lesson.price
-    print(payment.cours)
-    print(payment.summ)
     product.save()
     price = stripe.Price.create(
         unit_amount=price * 10,
