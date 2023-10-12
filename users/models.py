@@ -14,6 +14,7 @@ class User(AbstractUser):
     avatar = models.ImageField(upload_to='users/', verbose_name='аватар', **NULLABLE)
 
     role = models.CharField(max_length=15, verbose_name='роль', **NULLABLE)
+    last_login = models.DateTimeField(verbose_name='дата последнего входа', **NULLABLE)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

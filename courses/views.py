@@ -8,6 +8,7 @@ from courses.serializers import (CoursSerializer, LessonSerializer, PaymentSeria
                                  SubscriptionSerializer)
 from courses.permissions import IsOwnerOrModerator
 from courses.paginators import CoursesPaginator
+from courses.tasks import sendmail
 
 
 class CoursViewSet(viewsets.ModelViewSet):
@@ -25,6 +26,10 @@ class CoursViewSet(viewsets.ModelViewSet):
             return Cours.objects.all()
         else:
             return Cours.objects.filter(owner=self.request.user)
+    #
+    # def put(self, request, *args, **kwargs):
+    #     sendmail.delay()
+    #     return self.update(request, *args, **kwargs)
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
@@ -60,6 +65,10 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsOwnerOrModerator]
+
+    def put(self, request, *args, **kwargs):
+        sendmail.delay()
+        return self.update(request, *args, **kwargs)
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
