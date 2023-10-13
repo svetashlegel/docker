@@ -2,6 +2,7 @@ from rest_framework import viewsets, generics
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from courses.models import Cours, Lesson, Payment, Subscription
 from courses.serializers import (CoursSerializer, LessonSerializer, PaymentSerializer, PaymentCreateSerializer,
@@ -26,10 +27,10 @@ class CoursViewSet(viewsets.ModelViewSet):
             return Cours.objects.all()
         else:
             return Cours.objects.filter(owner=self.request.user)
-    #
-    # def put(self, request, *args, **kwargs):
-    #     sendmail.delay()
-    #     return self.update(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        sendmail.delay()
+        return super().update(request, *args, **kwargs)
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
