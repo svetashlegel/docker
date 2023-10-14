@@ -29,8 +29,10 @@ class CoursViewSet(viewsets.ModelViewSet):
             return Cours.objects.filter(owner=self.request.user)
 
     def update(self, request, *args, **kwargs):
-        sendmail.delay()
-        return super().update(request, *args, **kwargs)
+        response = super().update(request, *args, **kwargs)
+        product_id = response.data['id']
+        sendmail.delay(product_id)
+        return response
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
@@ -66,10 +68,6 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsOwnerOrModerator]
-
-    def put(self, request, *args, **kwargs):
-        sendmail.delay()
-        return self.update(request, *args, **kwargs)
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
