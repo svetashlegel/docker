@@ -166,8 +166,8 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 CELERY_BEAT_SCHEDULE = {
     'block_inactive_users': {
-        'task': 'users.tasks.block_inactive_users',  # Путь к задаче
-        'schedule': timedelta(seconds=10),  # Расписание выполнения задачи (например, каждые 10 минут)
+        'task': 'block_inactive_users',  # Путь к задаче
+        'schedule': timedelta(seconds=20),  # Расписание выполнения задачи (например, каждые 10 минут)
     },
 }
 
