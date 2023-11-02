@@ -14,8 +14,7 @@ services:
       - POSTGRES_PASSWORD=1651
       - POSTGRES_DB=dj-drf
       - PGDATA=/var/lib/postgresql/data/pgdata
-    #volumes:
-      #- .data/db:/var/lib/postgresql/data/pgdata
+
     ports:
       - '5432:5432'
     healthcheck:
